@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SDWebImage
 
 class NewsTableViewCell: UITableViewCell {
     
@@ -76,13 +77,19 @@ class NewsTableViewCell: UITableViewCell {
     
     // MARK: - Helpers
     
+    public func configure(imageURL: String, newsTitle: String, author: String, date: String) {
+        self.titleLabel.text = newsTitle
+        self.authorLabel.text = author
+        self.timeLabel.text = date
+        
+        newsImageView.sd_setImage(with: URL(string: imageURL), completed: nil)
+    }
+    
     private func configureUI() {
         
         addSubview(newsImageView)
         newsImageView.anchor(top: topAnchor, leading: leadingAnchor, bottom: bottomAnchor, paddingTop: 8, paddingLeading: 8, paddingBottom: 8)
         newsImageView.setDimensions(height: 92, width: 92)
-        
-        
         
         let stack = UIStackView(arrangedSubviews: [authorLabel, clockImage, timeLabel])
         stack.axis = .horizontal

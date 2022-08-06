@@ -21,7 +21,15 @@ final class APICaller {
             
             do {
                 let news: APIResponse = try JSONDecoder().decode(APIResponse.self, from: data)
-                completion(.success(news))
+                var filteredNews: APIResponse = APIResponse(news: [News]())
+                
+                for item in news.news {
+                    if item.author != "" && item.image != "None" {
+                        filteredNews.news.append(item)
+                    }
+                    
+                }
+                completion(.success(filteredNews))
             } catch {
                 completion(.failure(NetworkError.decodingError))
             }

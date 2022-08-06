@@ -8,14 +8,14 @@
 import Foundation
 
 struct APIResponse: Codable {
-    let news: [News]
+    var news: [News]
 }
 
 struct News: Codable {
     let id: String
     let title: String
     let author: String
-    let image: URL?
+    let image: String
     let category: [String]
     let published: String
 }

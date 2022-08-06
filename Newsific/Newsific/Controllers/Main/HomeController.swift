@@ -12,13 +12,20 @@ class HomeController: UIViewController {
     
     // MARK: - Properties
     
+    private var tableHeaderView = HomeControllerTableHeaderView()
+    private var sectionHeaderView = HomeTableSectionHeaderView()
+    
+    private var firstNew: News = News(id: "", title: "", author: "", image: "", category: [], published: "")
     private var news: APIResponse = APIResponse(news: [News]())
+    private var filteredNews: APIResponse = APIResponse(news: [News]())
+    private var selectedTopic: String = "All"
     
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .systemBackground
         tableView.showsVerticalScrollIndicator = false
         tableView.showsHorizontalScrollIndicator = false
+        tableView.sectionHeaderTopPadding = 0
         
         return tableView
     }()
@@ -31,6 +38,7 @@ class HomeController: UIViewController {
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: NewsTableViewCell.reuseID)
         tableView.delegate = self
         tableView.dataSource = self
+        sectionHeaderView.delegate = self
         
         fetchNews()
         
@@ -44,15 +52,28 @@ class HomeController: UIViewController {
     // MARK: - Helpers
     
     private func fetchNews() {
-        APICaller.shared.fetchNews { result in
+        APICaller.shared.fetchNews { [weak self] result in
+            guard let strongSelf = self else {
+                return
+            }
             switch result {
             case .success(let news):
-                self.news = news
-                //print("DEBUG: \(self.news.news[1].category)")
+                DispatchQueue.main.async {
+                    strongSelf.news.news = news.news
+                    strongSelf.firstNew = strongSelf.news.news.remove(at: 0)
+                    strongSelf.filteredNews = strongSelf.news
+                    strongSelf.setupTableHeaderView(with: strongSelf.firstNew)
+                    strongSelf.tableView.reloadData()
+                    print("DEBUG: count: \(strongSelf.news.news.count)")
+                }
             case .failure(let error):
                 print("DEBUG: Error occurred with error: \(error.localizedDescription)")
             }
         }
+    }
+    
+    private func setupTableHeaderView(with news: News) {
+        tableHeaderView.configure(imageURL: news.image, newsTitle: news.title, author: news.author, date: news.published)
     }
     
     private func configureUI() {
@@ -63,13 +84,15 @@ class HomeController: UIViewController {
         tableView.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor, paddingLeading: 8, paddingTrailing: 8)
         tableView.center(inView: view)
         
-        tableView.tableHeaderView = HomeControllerTableHeaderView()
+        tableView.tableHeaderView = tableHeaderView
         tableView.tableHeaderView?.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 400)
     }
     
     // MARK: - Selectors
     
 }
+
+// MARK: - UITableViewDelegate, UITableViewDataSource
 
 extension HomeController: UITableViewDelegate, UITableViewDataSource {
     
@@ -78,7 +101,7 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = HomeTableSectionHeaderView()
+        let headerView = sectionHeaderView
         
         return headerView
     }
@@ -88,12 +111,14 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return filteredNews.news.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.reuseID, for: indexPath) as! NewsTableViewCell
+        let newsAtIndex = filteredNews.news[indexPath.row]
         
+        cell.configure(imageURL: newsAtIndex.image, newsTitle: newsAtIndex.title, author: newsAtIndex.author, date: newsAtIndex.published)
         return cell
     }
     
@@ -101,4 +126,24 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
+}
+
+extension HomeController: HomeTableSectionHeaderViewDelegate {
+    func didTapTopic(_ topic: String) {
+        selectedTopic = topic
+        if selectedTopic == "all" {
+            filteredNews = news
+        } else {
+            filteredNews.news.removeAll()
+            for item in news.news {
+                for category in item.category {
+                    if category == topic {
+                        filteredNews.news.append(item)
+                    }
+                }
+            }
+        }
+        
+        tableView.reloadData()
+    }
 }

@@ -30,14 +30,7 @@ class HomeControllerTableHeaderView: UIView {
 //        return label
 //    }()
 //
-//    private let seeAllLabel: UILabel = {
-//        let label = UILabel()
-//        label.text = "See All"
-//        label.textColor = .systemGray
-//        label.font = UIFont.preferredFont(forTextStyle: .footnote, compatibleWith: .none)
-//
-//        return label
-//    }()
+//    
     
     private let searchBar: UISearchBar = {
         let searchBar = UISearchBar()
@@ -144,6 +137,14 @@ class HomeControllerTableHeaderView: UIView {
         
         addSubview(imageView)
         imageView.anchor(top: trendingLabel.bottomAnchor, leading: leadingAnchor, bottom: titleLabel.topAnchor, trailing: trailingAnchor, paddingTop: 8, paddingLeading: 8, paddingBottom: 8, paddingTrailing: 8)
+    }
+    
+    public func configure(imageURL: String, newsTitle: String, author: String, date: String) {
+        self.titleLabel.text = newsTitle
+        self.authorLabel.text = author
+        self.timeLabel.text = date
+        
+        imageView.sd_setImage(with: URL(string: imageURL), completed: nil)
     }
     
     // MARK: - Selectors

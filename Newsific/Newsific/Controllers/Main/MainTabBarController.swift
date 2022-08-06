@@ -43,6 +43,7 @@ class MainTabBarController: UITabBarController {
         let nav = UINavigationController(rootViewController: rootViewController)
         nav.tabBarItem = UITabBarItem(title: title, image: UIImage(systemName: unselectedImage), selectedImage: UIImage(systemName: selectedImage))
         nav.navigationBar.barTintColor = .systemBackground
+        nav.navigationBar.isHidden = true
         return nav
     }
     
