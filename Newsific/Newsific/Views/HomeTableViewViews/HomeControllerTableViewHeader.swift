@@ -20,38 +20,10 @@ class HomeControllerTableHeaderView: UIView {
         
         return label
     }()
-    
-//    private let latestLabel: UILabel = {
-//        let label = UILabel()
-//        label.text = "Latest"
-//        label.font = UIFont.preferredFont(forTextStyle: .headline, compatibleWith: .none)
-//        label.textColor = .systemBackground
-//
-//        return label
-//    }()
-//
-//    
-    
-    private let searchBar: UISearchBar = {
-        let searchBar = UISearchBar()
-        
-        let rightButton = UIButton()
-        rightButton.setImage(UIImage(systemName: "x.circle"), for: .normal)
-        rightButton.tintColor = .black
-        
-        searchBar.searchTextField.rightView = rightButton
-        searchBar.searchTextField.rightViewMode = .unlessEditing
-        searchBar.placeholder = "Search"
-        searchBar.searchBarStyle = .default
-        searchBar.searchTextField.leftView?.tintColor = UIColor.label
-        searchBar.searchTextField.backgroundColor = .systemGray5
-        
-        return searchBar
-    }()
-    
+
     private let imageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "warship.jpeg")?.withRenderingMode(.alwaysOriginal))
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleToFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 8
         
@@ -118,11 +90,8 @@ class HomeControllerTableHeaderView: UIView {
         backgroundColor = .systemBackground
         //backgroundColor = .red
         
-        addSubview(searchBar)
-        searchBar.anchor(top: topAnchor, leading: leadingAnchor, trailing: trailingAnchor)
-        
         addSubview(trendingLabel)
-        trendingLabel.anchor(top: searchBar.bottomAnchor, leading: leadingAnchor, paddingLeading: 8)
+        trendingLabel.anchor(top: topAnchor, leading: leadingAnchor, paddingLeading: 8)
         
         let stack = UIStackView(arrangedSubviews: [authorLabel, clockImage, timeLabel])
         stack.axis = .horizontal

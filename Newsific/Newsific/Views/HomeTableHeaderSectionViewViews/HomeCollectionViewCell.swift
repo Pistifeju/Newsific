@@ -15,7 +15,6 @@ class HomeCollectionViewCell: UICollectionViewCell {
     static let resueID = "HomeCollectionViewCell"
     static let itemSize: CGSize = CGSize(width: 100, height: 20)
     
-    
     public let label: UILabel = {
         let label = UILabel()
         label.text = "Science"

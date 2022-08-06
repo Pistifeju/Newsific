@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4469FB55A47C737DDD89B9B0 /* Pods_Newsific.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F92C63FEA6F5F417E96DD92 /* Pods_Newsific.framework */; };
+		A76CDB7D289EE4D30087C105 /* SeeAllController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76CDB7C289EE4D30087C105 /* SeeAllController.swift */; };
 		A7A5435A289DB7B900DDCC53 /* HomeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A54359289DB7B900DDCC53 /* HomeCollectionViewCell.swift */; };
 		A7F32B2B289C225900EC3034 /* Anchor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F32B2A289C225900EC3034 /* Anchor.swift */; };
 		A7F32B4D289C40FD00EC3034 /* HomeControllerTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F32B4C289C40FD00EC3034 /* HomeControllerTableViewHeader.swift */; };
@@ -28,6 +29,7 @@
 
 /* Begin PBXFileReference section */
 		0F92C63FEA6F5F417E96DD92 /* Pods_Newsific.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Newsific.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A76CDB7C289EE4D30087C105 /* SeeAllController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeeAllController.swift; sourceTree = "<group>"; };
 		A7A54359289DB7B900DDCC53 /* HomeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewCell.swift; sourceTree = "<group>"; };
 		A7F32B2A289C225900EC3034 /* Anchor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchor.swift; sourceTree = "<group>"; };
 		A7F32B4C289C40FD00EC3034 /* HomeControllerTableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeControllerTableViewHeader.swift; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 		A7F3A494289C0F37000FF16B /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				A76CDB7C289EE4D30087C105 /* SeeAllController.swift */,
 				A7F3A49D289C0FBE000FF16B /* Main */,
 			);
 			path = Controllers;
@@ -182,7 +185,6 @@
 				D2F06F5023DAD5EA638094E0 /* Pods-Newsific.debug.xcconfig */,
 				CAD42DD24EF3F0BCDDD06FEC /* Pods-Newsific.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -310,6 +312,7 @@
 				A7A5435A289DB7B900DDCC53 /* HomeCollectionViewCell.swift in Sources */,
 				A7F3A481289C0EA3000FF16B /* SceneDelegate.swift in Sources */,
 				A7F3A49C289C0F85000FF16B /* MainTabBarController.swift in Sources */,
+				A76CDB7D289EE4D30087C105 /* SeeAllController.swift in Sources */,
 				A7F3A4A3289C1CD7000FF16B /* BookmarkController.swift in Sources */,
 				A7F32B51289D777400EC3034 /* News.swift in Sources */,
 				A7F32B4D289C40FD00EC3034 /* HomeControllerTableViewHeader.swift in Sources */,

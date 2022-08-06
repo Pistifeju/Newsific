@@ -18,7 +18,7 @@ class NewsTableViewCell: UITableViewCell {
     
     private let newsImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "warship.jpeg")?.withRenderingMode(.alwaysOriginal))
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleToFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 8
         

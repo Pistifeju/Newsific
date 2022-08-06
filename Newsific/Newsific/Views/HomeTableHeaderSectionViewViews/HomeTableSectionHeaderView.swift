@@ -12,12 +12,18 @@ protocol HomeTableSectionHeaderViewDelegate {
     func didTapTopic(_ topic: String)
 }
 
+protocol HomeTableSectionHeaderViewSeeAllDelegate {
+    func didTapSeeAll()
+}
+
 class HomeTableSectionHeaderView: UIView {
     
     // MARK: - Properties
     
     private var selectedCell: IndexPath = IndexPath.init(row: 0, section: 0)
+    
     var delegate: HomeTableSectionHeaderViewDelegate?
+    var seeAllDelegate: HomeTableSectionHeaderViewSeeAllDelegate?
     
     private let topics = ["all",
                           "regional",
@@ -38,6 +44,8 @@ class HomeTableSectionHeaderView: UIView {
                           "food",
                           "game"]
     
+
+    
     private let topicsCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -50,14 +58,14 @@ class HomeTableSectionHeaderView: UIView {
         return cv
     }()
     
-    private let seeAllLabel: UILabel = {
-            let label = UILabel()
-            label.text = "See All"
-            label.textColor = .systemGray
-            label.font = UIFont.preferredFont(forTextStyle: .footnote, compatibleWith: .none)
-    
-            return label
-        }()
+    private lazy var seeAllButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("See All", for: .normal)
+        button.setTitleColor(UIColor.systemGray, for: .normal)
+        button.addTarget(self, action: #selector(didTapSeeAll), for: .touchUpInside)
+        
+        return button
+    }()
     
     private let latestLabel: UILabel = {
         let label = UILabel()
@@ -91,9 +99,9 @@ class HomeTableSectionHeaderView: UIView {
         addSubview(latestLabel)
         latestLabel.anchor(top: topAnchor, leading: leadingAnchor,paddingTop: 8, paddingLeading: 8)
         
-        addSubview(seeAllLabel)
-        seeAllLabel.anchor(trailing: trailingAnchor, paddingTrailing: 8)
-        seeAllLabel.centerY(inView: latestLabel)
+        addSubview(seeAllButton)
+        seeAllButton.anchor(trailing: trailingAnchor, paddingTrailing: 8)
+        seeAllButton.centerY(inView: latestLabel)
         
         addSubview(topicsCollectionView)
         topicsCollectionView.anchor(top: latestLabel.bottomAnchor, leading: leadingAnchor, bottom: bottomAnchor, trailing: trailingAnchor, paddingTop: 8, paddingLeading: 8, paddingBottom: 8)
@@ -102,6 +110,10 @@ class HomeTableSectionHeaderView: UIView {
     
     // MARK: - Selectors
     
+    @objc private func didTapSeeAll() {
+        print("DEBUG: Did tap see all")
+        seeAllDelegate?.didTapSeeAll()
+    }
 }
 
 extension HomeTableSectionHeaderView: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
@@ -110,7 +122,6 @@ extension HomeTableSectionHeaderView: UICollectionViewDelegateFlowLayout, UIColl
         if let previousSelectedCell = collectionView.cellForItem(at: selectedCell) as? HomeCollectionViewCell {
             previousSelectedCell.label.textColor = .systemGray
         }
-        
         
         selectedCell = indexPath
         

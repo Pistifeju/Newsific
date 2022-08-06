@@ -1,24 +1,19 @@
 //
-//  HomeController.swift
+//  SeeAllController.swift
 //  Newsific
 //
-//  Created by István Juhász on 2022. 08. 04..
+//  Created by István Juhász on 2022. 08. 06..
 //
 
 import Foundation
 import UIKit
 
-class HomeController: UIViewController {
+class SeeAllController: UIViewController {
     
     // MARK: - Properties
     
-    private var tableHeaderView = HomeControllerTableHeaderView()
-    private var sectionHeaderView = HomeTableSectionHeaderView()
-    
-    private var firstNew: News = News(id: "", title: "", author: "", image: "", category: [], published: "")
     private var news: APIResponse = APIResponse(news: [News]())
     private var filteredNews: APIResponse = APIResponse(news: [News]())
-    private var selectedTopic: String = "All"
     
     private let tableView: UITableView = {
         let tableView = UITableView()
@@ -30,6 +25,23 @@ class HomeController: UIViewController {
         return tableView
     }()
     
+    private let searchBar: UISearchBar = {
+        let searchBar = UISearchBar()
+    
+        let rightButton = UIButton()
+        rightButton.setImage(UIImage(systemName: "x.circle"), for: .normal)
+        rightButton.tintColor = .black
+    
+        searchBar.searchTextField.rightView = rightButton
+        searchBar.searchTextField.rightViewMode = .unlessEditing
+        searchBar.placeholder = "Search"
+        searchBar.searchBarStyle = .default
+        searchBar.searchTextField.leftView?.tintColor = UIColor.label
+        searchBar.searchTextField.backgroundColor = .systemGray5
+    
+        return searchBar
+    }()
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -39,16 +51,11 @@ class HomeController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
-        sectionHeaderView.delegate = self
-        sectionHeaderView.seeAllDelegate = self
+        searchBar.delegate = self
         
         fetchNews()
         
         configureUI()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
     }
     
     // MARK: - Helpers
@@ -62,9 +69,7 @@ class HomeController: UIViewController {
             case .success(let news):
                 DispatchQueue.main.async {
                     strongSelf.news.news = news.news
-                    strongSelf.firstNew = strongSelf.news.news.remove(at: 0)
                     strongSelf.filteredNews = strongSelf.news
-                    strongSelf.setupTableHeaderView(with: strongSelf.firstNew)
                     strongSelf.tableView.reloadData()
                     print("DEBUG: count: \(strongSelf.news.news.count)")
                 }
@@ -74,42 +79,39 @@ class HomeController: UIViewController {
         }
     }
     
-    private func setupTableHeaderView(with news: News) {
-        tableHeaderView.configure(imageURL: news.image, newsTitle: news.title, author: news.author, date: news.published)
-    }
-    
     private func configureUI() {
         view.backgroundColor = .systemBackground
-        navigationItem.title = "Newsific"
+        navigationController?.navigationBar.isHidden = false
+        navigationController?.navigationBar.isTranslucent = false
+        navigationController?.navigationBar.barTintColor = .systemBackground
+        navigationController?.navigationBar.tintColor = .label
         
         view.addSubview(tableView)
-        tableView.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor, paddingLeading: 8, paddingTrailing: 8)
-        tableView.center(inView: view)
-        
-        tableView.tableHeaderView = tableHeaderView
-        tableView.tableHeaderView?.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 400)
+        tableView.frame = view.bounds
     }
     
     // MARK: - Selectors
-    
+
+}
+
+extension SeeAllController: UISearchBarDelegate {
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        print("DEBUG: \(searchBar.text)")
+    }
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
 
-extension HomeController: UITableViewDelegate, UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 70
-    }
+extension SeeAllController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = sectionHeaderView
+        let headerView = searchBar
         
         return headerView
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return NewsTableViewCell.rowHeight
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -121,6 +123,7 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
         let newsAtIndex = filteredNews.news[indexPath.row]
         
         cell.configure(imageURL: newsAtIndex.image, newsTitle: newsAtIndex.title, author: newsAtIndex.author, date: newsAtIndex.published)
+        
         return cell
     }
     
@@ -129,39 +132,4 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.cellForRow(at: indexPath) as! NewsTableViewCell
     }
     
-}
-
-extension HomeController: HomeTableSectionHeaderViewSeeAllDelegate {
-    func didTapSeeAll() {
-        let vc = SeeAllController()
-        let nav = UINavigationController(rootViewController: vc)
-        nav.modalPresentationStyle = .fullScreen
-        nav.title = "See All"
-        nav.navigationBar.barTintColor = .systemBackground
-        
-        //present(nav, animated: true)
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-}
-
-// MARK: - HomeTableSectionHeaderViewDelegate
-
-extension HomeController: HomeTableSectionHeaderViewDelegate {
-    func didTapTopic(_ topic: String) {
-        selectedTopic = topic
-        if selectedTopic == "all" {
-            filteredNews = news
-        } else {
-            filteredNews.news.removeAll()
-            for item in news.news {
-                for category in item.category {
-                    if category == topic {
-                        filteredNews.news.append(item)
-                    }
-                }
-            }
-        }
-        
-        tableView.reloadData()
-    }
 }
