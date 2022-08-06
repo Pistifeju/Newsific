@@ -42,6 +42,8 @@ class MainTabBarController: UITabBarController {
     private func templateNavigationController(title: String, unselectedImage: String, selectedImage: String, rootViewController: UIViewController) -> UINavigationController {
         let nav = UINavigationController(rootViewController: rootViewController)
         nav.tabBarItem = UITabBarItem(title: title, image: UIImage(systemName: unselectedImage), selectedImage: UIImage(systemName: selectedImage))
+        nav.navigationBar.backgroundColor = .systemBackground
+        nav.navigationBar.tintColor = .label
         nav.navigationBar.barTintColor = .systemBackground
         nav.navigationBar.isHidden = true
         return nav

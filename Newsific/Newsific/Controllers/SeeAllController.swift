@@ -14,6 +14,7 @@ class SeeAllController: UIViewController {
     
     private var news: APIResponse = APIResponse(news: [News]())
     private var filteredNews: APIResponse = APIResponse(news: [News]())
+
     
     private let tableView: UITableView = {
         let tableView = UITableView()
@@ -95,15 +96,31 @@ class SeeAllController: UIViewController {
 }
 
 extension SeeAllController: UISearchBarDelegate {
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        print("DEBUG: \(searchBar.text)")
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        guard searchBar.text != "" else {
+            filteredNews = news
+            tableView.reloadData()
+            return
+        }
+        
+        filteredNews = APIResponse(news: [News]())
+        
+        for item in news.news {
+            if item.title.contains(searchBar.text ?? "") {
+                filteredNews.news.append(item)
+            }
+        }
+        
+        tableView.reloadData()
     }
+
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
 
 extension SeeAllController: UITableViewDelegate, UITableViewDataSource {
-    
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = searchBar
         
@@ -115,6 +132,13 @@ extension SeeAllController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if filteredNews.news.count == 0 {
+            self.tableView.setEmptyMessage("If there aren't any search results for \"\(searchBar.text!)\", does it even exists?")
+        } else {
+            self.tableView.restore()
+        }
+        
+        
         return filteredNews.news.count
     }
     
@@ -129,6 +153,7 @@ extension SeeAllController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        print("DEBUG: \(filteredNews.news[indexPath.row].title)")
         let cell = tableView.cellForRow(at: indexPath) as! NewsTableViewCell
     }
     

@@ -12,6 +12,15 @@ class HomeController: UIViewController {
     
     // MARK: - Properties
     
+    private lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refreshNews), for: .valueChanged)
+        refreshControl.tintColor = .label
+        refreshControl.attributedTitle = NSAttributedString(string: "Refreshing...")
+
+        return refreshControl
+    }()
+    
     private var tableHeaderView = HomeControllerTableHeaderView()
     private var sectionHeaderView = HomeTableSectionHeaderView()
     
@@ -19,6 +28,10 @@ class HomeController: UIViewController {
     private var news: APIResponse = APIResponse(news: [News]())
     private var filteredNews: APIResponse = APIResponse(news: [News]())
     private var selectedTopic: String = "All"
+    
+    private var emptyCategory: Bool {
+        return filteredNews.news.count == 0
+    }
     
     private let tableView: UITableView = {
         let tableView = UITableView()
@@ -36,8 +49,10 @@ class HomeController: UIViewController {
         super.viewDidLoad()
         
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: NewsTableViewCell.reuseID)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "emptyCell")
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.refreshControl = refreshControl
         
         sectionHeaderView.delegate = self
         sectionHeaderView.seeAllDelegate = self
@@ -47,8 +62,9 @@ class HomeController: UIViewController {
         configureUI()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = true
     }
     
     // MARK: - Helpers
@@ -66,6 +82,7 @@ class HomeController: UIViewController {
                     strongSelf.filteredNews = strongSelf.news
                     strongSelf.setupTableHeaderView(with: strongSelf.firstNew)
                     strongSelf.tableView.reloadData()
+                    strongSelf.refreshControl.endRefreshing()
                     print("DEBUG: count: \(strongSelf.news.news.count)")
                 }
             case .failure(let error):
@@ -92,6 +109,9 @@ class HomeController: UIViewController {
     
     // MARK: - Selectors
     
+    @objc private func refreshNews() {
+        fetchNews()
+    }
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
@@ -113,10 +133,25 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if emptyCategory {
+            return 1
+        }
+    
         return filteredNews.news.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if emptyCategory {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "emptyCell", for: indexPath)
+            cell.textLabel?.text = "Currently there aren't any news for the \(selectedTopic.capitalized) category."
+            cell.textLabel?.numberOfLines = 0
+            cell.textLabel?.textAlignment = .center
+            tableView.separatorStyle = .none
+            cell.textLabel?.textColor = .label
+            cell.backgroundColor = .systemBackground
+            return cell
+        }
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.reuseID, for: indexPath) as! NewsTableViewCell
         let newsAtIndex = filteredNews.news[indexPath.row]
         
@@ -125,6 +160,11 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if emptyCategory {
+            tableView.deselectRow(at: indexPath, animated: true)
+            return
+        }
+        
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath) as! NewsTableViewCell
     }
@@ -137,7 +177,9 @@ extension HomeController: HomeTableSectionHeaderViewSeeAllDelegate {
         let nav = UINavigationController(rootViewController: vc)
         nav.modalPresentationStyle = .fullScreen
         nav.title = "See All"
+        nav.navigationBar.tintColor = .label
         nav.navigationBar.barTintColor = .systemBackground
+        nav.navigationBar.backgroundColor = .systemBackground
         
         //present(nav, animated: true)
         self.navigationController?.pushViewController(vc, animated: true)
