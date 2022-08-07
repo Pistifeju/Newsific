@@ -144,7 +144,7 @@ class DetailedNewsController: UIViewController {
         
         scrollView.addSubview(bookmarkButton)
         bookmarkButton.anchor(trailing: view.trailingAnchor, paddingTrailing: 8)
-        bookmarkButton.setDimensions(height: 30, width: 30)
+        bookmarkButton.setDimensions(height: 50, width: 50)
         bookmarkButton.centerY(inView: authorLabel)
         
         scrollView.addSubview(timeLabel)

@@ -33,7 +33,7 @@ class HomeController: UIViewController {
         return filteredNews.news.count == 0
     }
     
-    private let tableView: UITableView = {
+    private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .systemBackground
         tableView.showsVerticalScrollIndicator = false
@@ -41,6 +41,15 @@ class HomeController: UIViewController {
         tableView.sectionHeaderTopPadding = 0
         
         return tableView
+    }()
+    
+    private let trendingLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Trending"
+        label.font = UIFont.preferredFont(forTextStyle: .headline, compatibleWith: .none)
+        label.textColor = .label
+        
+        return label
     }()
     
     // MARK: - Lifecycle
@@ -53,6 +62,8 @@ class HomeController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.refreshControl = refreshControl
+        
+        tableHeaderView.delegate = self
         
         sectionHeaderView.delegate = self
         sectionHeaderView.seeAllDelegate = self
@@ -92,16 +103,19 @@ class HomeController: UIViewController {
     }
     
     private func setupTableHeaderView(with news: News) {
-        tableHeaderView.configure(imageURL: news.image, newsTitle: news.title, author: news.author, date: news.published)
+        tableHeaderView.configure(withData: news)
     }
     
     private func configureUI() {
         view.backgroundColor = .systemBackground
         navigationItem.title = "Newsific"
         
+        view.addSubview(trendingLabel)
+        trendingLabel.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: view.leadingAnchor, paddingLeading: 16)
+        
         view.addSubview(tableView)
-        tableView.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor, paddingLeading: 8, paddingTrailing: 8)
-        tableView.center(inView: view)
+        tableView.anchor(top: trendingLabel.bottomAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor, paddingLeading: 8, paddingTrailing: 8)
+        //tableView.center(inView: view)
         
         tableView.tableHeaderView = tableHeaderView
         tableView.tableHeaderView?.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 400)
@@ -205,5 +219,17 @@ extension HomeController: HomeTableSectionHeaderViewDelegate {
         }
         
         tableView.reloadData()
+    }
+}
+
+// MARK: - HomeControllerTableHeaderViewDelegate
+
+extension HomeController: HomeControllerTableHeaderViewDelegate {
+    func didTapHeader(_ sender: HomeControllerTableHeaderView) {
+        let vc = DetailedNewsController(withData: sender.data)
+        let nav = UINavigationController(rootViewController: vc)
+        nav.modalPresentationStyle = .fullScreen
+        
+        present(nav, animated: true)
     }
 }

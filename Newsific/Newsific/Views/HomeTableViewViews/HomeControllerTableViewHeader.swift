@@ -7,20 +7,20 @@
 
 import Foundation
 import UIKit
+ 
+protocol HomeControllerTableHeaderViewDelegate {
+    func didTapHeader(_ sender: HomeControllerTableHeaderView)
+}
 
 class HomeControllerTableHeaderView: UIView {
     
     // MARK: - Properties
     
-    private let trendingLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Trending"
-        label.font = UIFont.preferredFont(forTextStyle: .headline, compatibleWith: .none)
-        label.textColor = .label
-        
-        return label
-    }()
-
+    private let tapGestureRecognizer = UITapGestureRecognizer()
+    public var data: News = News(id: "", title: "", author: "", image: "", category: [], published: "")
+    
+    var delegate: HomeControllerTableHeaderViewDelegate?
+    
     private let imageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "warship.jpeg")?.withRenderingMode(.alwaysOriginal))
         imageView.contentMode = .scaleToFill
@@ -69,9 +69,11 @@ class HomeControllerTableHeaderView: UIView {
     }()
     
     // MARK: - Lifecycle
-    
     override init(frame: CGRect) {
-        super.init(frame: .zero)
+        super.init(frame: frame)
+        
+        addGestureRecognizer(tapGestureRecognizer)
+        tapGestureRecognizer.addTarget(self, action: #selector(didTapHeader))
         
         configureUI()
     }
@@ -86,9 +88,6 @@ class HomeControllerTableHeaderView: UIView {
         backgroundColor = .systemBackground
         //backgroundColor = .red
         
-        addSubview(trendingLabel)
-        trendingLabel.anchor(top: topAnchor, leading: leadingAnchor, paddingLeading: 8)
-        
         let stack = UIStackView(arrangedSubviews: [authorLabel, clockImage, timeLabel])
         stack.axis = .horizontal
         
@@ -101,17 +100,22 @@ class HomeControllerTableHeaderView: UIView {
         titleLabel.anchor(leading: leadingAnchor, bottom: stack.topAnchor, trailing: trailingAnchor, paddingLeading: 8, paddingBottom: 8, paddingTrailing: 8)
         
         addSubview(imageView)
-        imageView.anchor(top: trendingLabel.bottomAnchor, leading: leadingAnchor, bottom: titleLabel.topAnchor, trailing: trailingAnchor, paddingTop: 8, paddingLeading: 8, paddingBottom: 8, paddingTrailing: 8)
+        imageView.anchor(top: topAnchor, leading: leadingAnchor, bottom: titleLabel.topAnchor, trailing: trailingAnchor, paddingTop: 8, paddingLeading: 8, paddingBottom: 8, paddingTrailing: 8)
     }
     
-    public func configure(imageURL: String, newsTitle: String, author: String, date: String) {
-        self.titleLabel.text = newsTitle
-        self.authorLabel.text = author
-        self.timeLabel.text = date
+    public func configure(withData data: News) {
+        self.data = data
         
-        imageView.sd_setImage(with: URL(string: imageURL), completed: nil)
+        self.titleLabel.text = self.data.title
+        self.authorLabel.text = self.data.author
+        self.timeLabel.text = self.data.published
+        
+        imageView.sd_setImage(with: URL(string: self.data.image), completed: nil)
     }
     
     // MARK: - Selectors
     
+    @objc private func didTapHeader() {
+        delegate?.didTapHeader(self)
+    }
 }
