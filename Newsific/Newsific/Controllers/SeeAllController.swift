@@ -83,9 +83,6 @@ class SeeAllController: UIViewController {
     private func configureUI() {
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.isHidden = false
-        navigationController?.navigationBar.isTranslucent = false
-        navigationController?.navigationBar.barTintColor = .systemBackground
-        navigationController?.navigationBar.tintColor = .label
         
         view.addSubview(tableView)
         tableView.frame = view.bounds
@@ -153,8 +150,12 @@ extension SeeAllController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        print("DEBUG: \(filteredNews.news[indexPath.row].title)")
-        let cell = tableView.cellForRow(at: indexPath) as! NewsTableViewCell
+        
+        let vc = DetailedNewsController(withData: filteredNews.news[indexPath.row])
+        let nav = UINavigationController(rootViewController: vc)
+        nav.modalPresentationStyle = .fullScreen
+        
+        present(nav, animated: true)
     }
     
 }

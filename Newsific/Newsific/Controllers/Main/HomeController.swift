@@ -161,12 +161,18 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if emptyCategory {
-            tableView.deselectRow(at: indexPath, animated: true)
+            tableView.deselectRow(at: indexPath, animated: false)
             return
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
-        let cell = tableView.cellForRow(at: indexPath) as! NewsTableViewCell
+        //let cell = tableView.cellForRow(at: indexPath) as! NewsTableViewCell
+        
+        let vc = DetailedNewsController(withData: filteredNews.news[indexPath.row])
+        let nav = UINavigationController(rootViewController: vc)
+        nav.modalPresentationStyle = .fullScreen
+        
+        present(nav, animated: true)
     }
     
 }
@@ -174,12 +180,6 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
 extension HomeController: HomeTableSectionHeaderViewSeeAllDelegate {
     func didTapSeeAll() {
         let vc = SeeAllController()
-        let nav = UINavigationController(rootViewController: vc)
-        nav.modalPresentationStyle = .fullScreen
-        nav.title = "See All"
-        nav.navigationBar.tintColor = .label
-        nav.navigationBar.barTintColor = .systemBackground
-        nav.navigationBar.backgroundColor = .systemBackground
         
         //present(nav, animated: true)
         self.navigationController?.pushViewController(vc, animated: true)

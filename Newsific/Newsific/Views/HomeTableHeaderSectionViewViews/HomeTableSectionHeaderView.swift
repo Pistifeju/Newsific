@@ -21,6 +21,7 @@ class HomeTableSectionHeaderView: UIView {
     // MARK: - Properties
     
     private var selectedCell: IndexPath = IndexPath.init(row: 0, section: 0)
+    private var firstAppear: Bool = true
     
     var delegate: HomeTableSectionHeaderViewDelegate?
     var seeAllDelegate: HomeTableSectionHeaderViewSeeAllDelegate?
@@ -143,7 +144,12 @@ extension HomeTableSectionHeaderView: UICollectionViewDelegateFlowLayout, UIColl
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCollectionViewCell.resueID, for: indexPath) as! HomeCollectionViewCell
         cell.label.text = topics[indexPath.row].capitalized
-        cell.label.textColor = .systemGray
+        if cell.label.text == "All" && firstAppear {
+            cell.label.textColor = .label
+            firstAppear = false
+        } else {
+            cell.label.textColor = .systemGray
+        }
         return cell
     }
     

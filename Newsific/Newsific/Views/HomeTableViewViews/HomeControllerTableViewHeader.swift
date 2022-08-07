@@ -45,8 +45,6 @@ class HomeControllerTableHeaderView: UIView {
     private let authorLabel: UILabel = {
         let label = UILabel()
         label.text = "BBC News"
-        label.numberOfLines = 2
-        label.lineBreakMode = .byWordWrapping
         label.textColor = .label
         label.font = UIFont.preferredFont(forTextStyle: .subheadline, compatibleWith: .none)
         
@@ -56,8 +54,6 @@ class HomeControllerTableHeaderView: UIView {
     private let timeLabel: UILabel = {
         let label = UILabel()
         label.text = "4h ago"
-        label.numberOfLines = 2
-        label.lineBreakMode = .byWordWrapping
         label.textColor = .systemGray
         label.font = UIFont.preferredFont(forTextStyle: .footnote, compatibleWith: .none)
         
