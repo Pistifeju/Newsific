@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SkeletonView
 
 class SeeAllController: UIViewController {
     
@@ -14,7 +15,6 @@ class SeeAllController: UIViewController {
     
     private var news: APIResponse = APIResponse(news: [News]())
     private var filteredNews: APIResponse = APIResponse(news: [News]())
-
     
     private let tableView: UITableView = {
         let tableView = UITableView()
@@ -32,7 +32,7 @@ class SeeAllController: UIViewController {
         let rightButton = UIButton()
         rightButton.setImage(UIImage(systemName: "x.circle"), for: .normal)
         rightButton.tintColor = .black
-    
+        
         searchBar.searchTextField.rightView = rightButton
         searchBar.searchTextField.rightViewMode = .unlessEditing
         searchBar.placeholder = "Search"
@@ -51,7 +51,7 @@ class SeeAllController: UIViewController {
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: NewsTableViewCell.reuseID)
         tableView.delegate = self
         tableView.dataSource = self
-        
+    
         searchBar.delegate = self
         
         fetchNews()
@@ -83,6 +83,7 @@ class SeeAllController: UIViewController {
     private func configureUI() {
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.isHidden = false
+        navigationController?.navigationBar.tintColor = .label
         
         view.addSubview(tableView)
         tableView.frame = view.bounds
@@ -116,8 +117,12 @@ extension SeeAllController: UISearchBarDelegate {
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
 
-extension SeeAllController: UITableViewDelegate, UITableViewDataSource {
-
+extension SeeAllController: UITableViewDelegate, UITableViewDataSource, SkeletonTableViewDataSource {
+    
+    func collectionSkeletonView(_ skeletonView: UITableView, cellIdentifierForRowAt indexPath: IndexPath) -> ReusableCellIdentifier {
+        return NewsTableViewCell.reuseID
+    }
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = searchBar
         
@@ -129,7 +134,7 @@ extension SeeAllController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if filteredNews.news.count == 0 {
+        if filteredNews.news.count == 0 && searchBar.text != "" {
             self.tableView.setEmptyMessage("If there aren't any search results for \"\(searchBar.text!)\", does it even exists?")
         } else {
             self.tableView.restore()
@@ -142,6 +147,7 @@ extension SeeAllController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.reuseID, for: indexPath) as! NewsTableViewCell
         let newsAtIndex = filteredNews.news[indexPath.row]
+        cell.isSkeletonable = true
         
         cell.configure(imageURL: newsAtIndex.image, newsTitle: newsAtIndex.title, author: newsAtIndex.author, date: newsAtIndex.published)
         

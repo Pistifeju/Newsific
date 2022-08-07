@@ -11,6 +11,7 @@
 		A76CDB7D289EE4D30087C105 /* SeeAllController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76CDB7C289EE4D30087C105 /* SeeAllController.swift */; };
 		A76CDB7F289EFB2A0087C105 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76CDB7E289EFB2A0087C105 /* Extensions.swift */; };
 		A76CDB81289FF8BC0087C105 /* DetailedNewsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76CDB80289FF8BC0087C105 /* DetailedNewsController.swift */; };
+		A76CDB8728A02E240087C105 /* LoremSwiftum in Frameworks */ = {isa = PBXBuildFile; productRef = A76CDB8628A02E240087C105 /* LoremSwiftum */; };
 		A7A5435A289DB7B900DDCC53 /* HomeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A54359289DB7B900DDCC53 /* HomeCollectionViewCell.swift */; };
 		A7F32B2B289C225900EC3034 /* Anchor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F32B2A289C225900EC3034 /* Anchor.swift */; };
 		A7F32B4D289C40FD00EC3034 /* HomeControllerTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F32B4C289C40FD00EC3034 /* HomeControllerTableViewHeader.swift */; };
@@ -23,10 +24,7 @@
 		A7F3A481289C0EA3000FF16B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F3A480289C0EA3000FF16B /* SceneDelegate.swift */; };
 		A7F3A488289C0EA4000FF16B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A7F3A487289C0EA4000FF16B /* Assets.xcassets */; };
 		A7F3A48B289C0EA4000FF16B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7F3A489289C0EA4000FF16B /* LaunchScreen.storyboard */; };
-		A7F3A49C289C0F85000FF16B /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F3A49B289C0F85000FF16B /* MainTabBarController.swift */; };
 		A7F3A49F289C1CC8000FF16B /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F3A49E289C1CC8000FF16B /* HomeController.swift */; };
-		A7F3A4A1289C1CCF000FF16B /* ExploreController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F3A4A0289C1CCF000FF16B /* ExploreController.swift */; };
-		A7F3A4A3289C1CD7000FF16B /* BookmarkController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F3A4A2289C1CD7000FF16B /* BookmarkController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,10 +46,7 @@
 		A7F3A487289C0EA4000FF16B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A7F3A48A289C0EA4000FF16B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A7F3A48C289C0EA4000FF16B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A7F3A49B289C0F85000FF16B /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		A7F3A49E289C1CC8000FF16B /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
-		A7F3A4A0289C1CCF000FF16B /* ExploreController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreController.swift; sourceTree = "<group>"; };
-		A7F3A4A2289C1CD7000FF16B /* BookmarkController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkController.swift; sourceTree = "<group>"; };
 		CAD42DD24EF3F0BCDDD06FEC /* Pods-Newsific.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Newsific.release.xcconfig"; path = "Target Support Files/Pods-Newsific/Pods-Newsific.release.xcconfig"; sourceTree = "<group>"; };
 		D2F06F5023DAD5EA638094E0 /* Pods-Newsific.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Newsific.debug.xcconfig"; path = "Target Support Files/Pods-Newsific/Pods-Newsific.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -61,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A76CDB8728A02E240087C105 /* LoremSwiftum in Frameworks */,
 				4469FB55A47C737DDD89B9B0 /* Pods_Newsific.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -177,10 +173,7 @@
 		A7F3A49D289C0FBE000FF16B /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				A7F3A49B289C0F85000FF16B /* MainTabBarController.swift */,
 				A7F3A49E289C1CC8000FF16B /* HomeController.swift */,
-				A7F3A4A0289C1CCF000FF16B /* ExploreController.swift */,
-				A7F3A4A2289C1CD7000FF16B /* BookmarkController.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -212,6 +205,9 @@
 			dependencies = (
 			);
 			name = Newsific;
+			packageProductDependencies = (
+				A76CDB8628A02E240087C105 /* LoremSwiftum */,
+			);
 			productName = Newsific;
 			productReference = A7F3A47B289C0EA3000FF16B /* Newsific.app */;
 			productType = "com.apple.product-type.application";
@@ -240,6 +236,9 @@
 				Base,
 			);
 			mainGroup = A7F3A472289C0EA3000FF16B;
+			packageReferences = (
+				A76CDB8528A02E240087C105 /* XCRemoteSwiftPackageReference "LoremSwiftum" */,
+			);
 			productRefGroup = A7F3A47C289C0EA3000FF16B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -311,17 +310,14 @@
 				A7F3A49F289C1CC8000FF16B /* HomeController.swift in Sources */,
 				A7F32B2B289C225900EC3034 /* Anchor.swift in Sources */,
 				A7F32B55289D93A200EC3034 /* NewsTableViewCell.swift in Sources */,
-				A7F3A4A1289C1CCF000FF16B /* ExploreController.swift in Sources */,
 				A7F32B53289D7ADC00EC3034 /* Error.swift in Sources */,
 				A7F3A47F289C0EA3000FF16B /* AppDelegate.swift in Sources */,
 				A76CDB81289FF8BC0087C105 /* DetailedNewsController.swift in Sources */,
 				A7F32B4F289D76ED00EC3034 /* APICaller.swift in Sources */,
 				A7A5435A289DB7B900DDCC53 /* HomeCollectionViewCell.swift in Sources */,
 				A7F3A481289C0EA3000FF16B /* SceneDelegate.swift in Sources */,
-				A7F3A49C289C0F85000FF16B /* MainTabBarController.swift in Sources */,
 				A76CDB7D289EE4D30087C105 /* SeeAllController.swift in Sources */,
 				A76CDB7F289EFB2A0087C105 /* Extensions.swift in Sources */,
-				A7F3A4A3289C1CD7000FF16B /* BookmarkController.swift in Sources */,
 				A7F32B51289D777400EC3034 /* News.swift in Sources */,
 				A7F32B4D289C40FD00EC3034 /* HomeControllerTableViewHeader.swift in Sources */,
 				A7F32B57289DAC4600EC3034 /* HomeTableSectionHeaderView.swift in Sources */,
@@ -534,6 +530,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A76CDB8528A02E240087C105 /* XCRemoteSwiftPackageReference "LoremSwiftum" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lukaskubanek/LoremSwiftum";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A76CDB8628A02E240087C105 /* LoremSwiftum */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A76CDB8528A02E240087C105 /* XCRemoteSwiftPackageReference "LoremSwiftum" */;
+			productName = LoremSwiftum;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A7F3A473289C0EA3000FF16B /* Project object */;
 }

@@ -14,19 +14,7 @@ class DetailedNewsController: UIViewController {
     
     // MARK: - Properties
     
-    private let data: News
-    
-    private lazy var bookmarkButton: UIButton = {
-        let button = UIButton()
-        
-        button.setImage(UIImage(systemName: "bookmark"), for: .normal)
-        
-        button.tintColor = .systemBlue
-        button.isSelected = false
-        button.addTarget(self, action: #selector(didTapBookmark), for: .touchUpInside)
-        
-        return button
-    }()
+    private var data: News
     
     private let textView: UITextView = {
         let textView = UITextView()
@@ -142,11 +130,6 @@ class DetailedNewsController: UIViewController {
         scrollView.addSubview(authorLabel)
         authorLabel.anchor(top: scrollView.topAnchor, leading: scrollView.leadingAnchor, paddingTop: 8, paddingLeading: 8)
         
-        scrollView.addSubview(bookmarkButton)
-        bookmarkButton.anchor(trailing: view.trailingAnchor, paddingTrailing: 8)
-        bookmarkButton.setDimensions(height: 50, width: 50)
-        bookmarkButton.centerY(inView: authorLabel)
-        
         scrollView.addSubview(timeLabel)
         timeLabel.anchor(top: authorLabel.bottomAnchor, leading: scrollView.leadingAnchor, paddingTop: 8, paddingLeading: 8)
         
@@ -165,15 +148,6 @@ class DetailedNewsController: UIViewController {
     }
     
     // MARK: - Selectors
-    
-    @objc private func didTapBookmark() {
-        bookmarkButton.isSelected.toggle()
-        if bookmarkButton.isSelected {
-            bookmarkButton.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
-        } else {
-            bookmarkButton.setImage(UIImage(systemName: "bookmark"), for: .normal)
-        }
-    }
     
     @objc private func dismissSelf() {
         dismiss(animated: true)

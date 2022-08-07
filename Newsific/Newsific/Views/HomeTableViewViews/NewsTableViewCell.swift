@@ -21,7 +21,7 @@ class NewsTableViewCell: UITableViewCell {
         imageView.contentMode = .scaleToFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 8
-        
+        imageView.isSkeletonable = true
         
         return imageView
     }()
@@ -67,7 +67,7 @@ class NewsTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+    
         configureUI()
     }
     

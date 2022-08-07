@@ -8,5 +8,6 @@ target 'Newsific' do
   # Pods for Newsific
 
 pod 'SDWebImage'
+pod 'SkeletonView'
 
 end

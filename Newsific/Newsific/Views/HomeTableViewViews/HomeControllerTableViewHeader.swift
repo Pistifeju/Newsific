@@ -7,7 +7,8 @@
 
 import Foundation
 import UIKit
- 
+import SkeletonView
+
 protocol HomeControllerTableHeaderViewDelegate {
     func didTapHeader(_ sender: HomeControllerTableHeaderView)
 }
@@ -26,7 +27,7 @@ class HomeControllerTableHeaderView: UIView {
         imageView.contentMode = .scaleToFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 8
-        
+        imageView.isSkeletonable = true
         
         return imageView
     }()
@@ -38,6 +39,7 @@ class HomeControllerTableHeaderView: UIView {
         label.lineBreakMode = .byTruncatingTail
         label.textColor = .label
         label.font = UIFont.preferredFont(forTextStyle: .title3, compatibleWith: .none)
+        label.isSkeletonable = true
         
         return label
     }()
@@ -47,6 +49,7 @@ class HomeControllerTableHeaderView: UIView {
         label.text = "BBC News"
         label.textColor = .label
         label.font = UIFont.preferredFont(forTextStyle: .subheadline, compatibleWith: .none)
+        label.isSkeletonable = true
         
         return label
     }()
@@ -56,6 +59,7 @@ class HomeControllerTableHeaderView: UIView {
         label.text = "4h ago"
         label.textColor = .systemGray
         label.font = UIFont.preferredFont(forTextStyle: .footnote, compatibleWith: .none)
+        label.isSkeletonable = true
         
         return label
     }()
@@ -64,6 +68,7 @@ class HomeControllerTableHeaderView: UIView {
         let imageView = UIImageView(image: UIImage(systemName: "clock"))
         imageView.tintColor = .systemGray
         imageView.setDimensions(height: 15, width: 15)
+        imageView.isSkeletonable = true
         
         return imageView
     }()
@@ -72,6 +77,7 @@ class HomeControllerTableHeaderView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        isSkeletonable = true
         addGestureRecognizer(tapGestureRecognizer)
         tapGestureRecognizer.addTarget(self, action: #selector(didTapHeader))
         
@@ -90,6 +96,7 @@ class HomeControllerTableHeaderView: UIView {
         
         let stack = UIStackView(arrangedSubviews: [authorLabel, clockImage, timeLabel])
         stack.axis = .horizontal
+        stack.isSkeletonable = true
         
         addSubview(stack)
         stack.anchor(leading: leadingAnchor, bottom: bottomAnchor, paddingLeading: 8, paddingBottom: 8)

@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SkeletonView
 
 class HomeController: UIViewController {
     
@@ -63,8 +64,9 @@ class HomeController: UIViewController {
         tableView.dataSource = self
         tableView.refreshControl = refreshControl
         
+        tableHeaderView.isSkeletonable = true
         tableHeaderView.delegate = self
-        
+
         sectionHeaderView.delegate = self
         sectionHeaderView.seeAllDelegate = self
         
@@ -72,7 +74,7 @@ class HomeController: UIViewController {
         
         configureUI()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
@@ -81,20 +83,24 @@ class HomeController: UIViewController {
     // MARK: - Helpers
     
     private func fetchNews() {
+        tableHeaderView.showAnimatedSkeleton()
+        
+        
         APICaller.shared.fetchNews { [weak self] result in
             guard let strongSelf = self else {
                 return
             }
+            
             switch result {
             case .success(let news):
                 DispatchQueue.main.async {
                     strongSelf.news.news = news.news
                     strongSelf.firstNew = strongSelf.news.news.remove(at: 0)
                     strongSelf.filteredNews = strongSelf.news
+                    strongSelf.tableHeaderView.hideSkeleton()
                     strongSelf.setupTableHeaderView(with: strongSelf.firstNew)
                     strongSelf.tableView.reloadData()
                     strongSelf.refreshControl.endRefreshing()
-                    print("DEBUG: count: \(strongSelf.news.news.count)")
                 }
             case .failure(let error):
                 print("DEBUG: Error occurred with error: \(error.localizedDescription)")
@@ -115,7 +121,6 @@ class HomeController: UIViewController {
         
         view.addSubview(tableView)
         tableView.anchor(top: trendingLabel.bottomAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor, paddingLeading: 8, paddingTrailing: 8)
-        //tableView.center(inView: view)
         
         tableView.tableHeaderView = tableHeaderView
         tableView.tableHeaderView?.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 400)
@@ -130,7 +135,11 @@ class HomeController: UIViewController {
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
 
-extension HomeController: UITableViewDelegate, UITableViewDataSource {
+extension HomeController: UITableViewDelegate, UITableViewDataSource, SkeletonTableViewDataSource {
+    
+    func collectionSkeletonView(_ skeletonView: UITableView, cellIdentifierForRowAt indexPath: IndexPath) -> ReusableCellIdentifier {
+        return NewsTableViewCell.reuseID
+    }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 70
@@ -157,7 +166,7 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if emptyCategory {
             let cell = tableView.dequeueReusableCell(withIdentifier: "emptyCell", for: indexPath)
-            cell.textLabel?.text = "Currently there aren't any news for the \(selectedTopic.capitalized) category."
+            cell.textLabel?.text = "Loading News"
             cell.textLabel?.numberOfLines = 0
             cell.textLabel?.textAlignment = .center
             tableView.separatorStyle = .none
@@ -167,6 +176,7 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
         }
         
         let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.reuseID, for: indexPath) as! NewsTableViewCell
+        
         let newsAtIndex = filteredNews.news[indexPath.row]
         
         cell.configure(imageURL: newsAtIndex.image, newsTitle: newsAtIndex.title, author: newsAtIndex.author, date: newsAtIndex.published)
@@ -180,7 +190,6 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
-        //let cell = tableView.cellForRow(at: indexPath) as! NewsTableViewCell
         
         let vc = DetailedNewsController(withData: filteredNews.news[indexPath.row])
         let nav = UINavigationController(rootViewController: vc)
@@ -190,6 +199,8 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
     }
     
 }
+
+// MARK: - HomeTableSectionHeaderViewSeeAllDelegate
 
 extension HomeController: HomeTableSectionHeaderViewSeeAllDelegate {
     func didTapSeeAll() {
