@@ -63,7 +63,7 @@ class DetailedNewsController: UIViewController {
     
     private lazy var timeLabel: UILabel = {
         let label = UILabel()
-        label.text = data.published
+        label.text = data.convertedPublished
         label.textColor = .systemGray
         label.font = UIFont.preferredFont(forTextStyle: .callout, compatibleWith: .none)
         

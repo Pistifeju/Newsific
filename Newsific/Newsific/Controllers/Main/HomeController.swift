@@ -25,6 +25,8 @@ class HomeController: UIViewController {
     private var tableHeaderView = HomeControllerTableHeaderView()
     private var sectionHeaderView = HomeTableSectionHeaderView()
     
+    
+    private var didFinishFetch = false
     private var firstNew: News = News(id: "", title: "", author: "", image: "", category: [], published: "")
     private var news: APIResponse = APIResponse(news: [News]())
     private var filteredNews: APIResponse = APIResponse(news: [News]())
@@ -94,6 +96,7 @@ class HomeController: UIViewController {
             switch result {
             case .success(let news):
                 DispatchQueue.main.async {
+                    strongSelf.didFinishFetch = true
                     strongSelf.news.news = news.news
                     strongSelf.firstNew = strongSelf.news.news.remove(at: 0)
                     strongSelf.filteredNews = strongSelf.news
@@ -129,6 +132,7 @@ class HomeController: UIViewController {
     // MARK: - Selectors
     
     @objc private func refreshNews() {
+        didFinishFetch = false
         fetchNews()
     }
 }
@@ -166,7 +170,13 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource, SkeletonTa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if emptyCategory {
             let cell = tableView.dequeueReusableCell(withIdentifier: "emptyCell", for: indexPath)
-            cell.textLabel?.text = "Loading News"
+            
+            if didFinishFetch {
+                cell.textLabel?.text = "There isn't any news in the \(selectedTopic.capitalized) category."
+            } else {
+                cell.textLabel?.text = "Loading News"
+            }
+            
             cell.textLabel?.numberOfLines = 0
             cell.textLabel?.textAlignment = .center
             tableView.separatorStyle = .none
@@ -179,7 +189,7 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource, SkeletonTa
         
         let newsAtIndex = filteredNews.news[indexPath.row]
         
-        cell.configure(imageURL: newsAtIndex.image, newsTitle: newsAtIndex.title, author: newsAtIndex.author, date: newsAtIndex.published)
+        cell.configure(imageURL: newsAtIndex.image, newsTitle: newsAtIndex.title, author: newsAtIndex.author, date: newsAtIndex.convertedPublished)
         return cell
     }
     

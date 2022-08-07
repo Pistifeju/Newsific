@@ -115,7 +115,7 @@ class HomeControllerTableHeaderView: UIView {
         
         self.titleLabel.text = self.data.title
         self.authorLabel.text = self.data.author
-        self.timeLabel.text = self.data.published
+        self.timeLabel.text = self.data.convertedPublished
         
         imageView.sd_setImage(with: URL(string: self.data.image), completed: nil)
     }

@@ -149,7 +149,7 @@ extension SeeAllController: UITableViewDelegate, UITableViewDataSource, Skeleton
         let newsAtIndex = filteredNews.news[indexPath.row]
         cell.isSkeletonable = true
         
-        cell.configure(imageURL: newsAtIndex.image, newsTitle: newsAtIndex.title, author: newsAtIndex.author, date: newsAtIndex.published)
+        cell.configure(imageURL: newsAtIndex.image, newsTitle: newsAtIndex.title, author: newsAtIndex.author, date: newsAtIndex.convertedPublished)
         
         return cell
     }

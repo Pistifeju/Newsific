@@ -18,4 +18,19 @@ struct News: Codable {
     let image: String
     let category: [String]
     let published: String
+    
+    var convertedPublished: String {
+        let dateFormatterGet = DateFormatter()
+        dateFormatterGet.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
+
+        let dateFormatterPrint = DateFormatter()
+        dateFormatterPrint.dateFormat = "MMM dd,yyyy"
+
+        
+        if let date = dateFormatterGet.date(from: published) {
+            return Date().offsetFrom(date: date) + " ago"
+        } else {
+           return "Error"
+        }
+    }
 }
