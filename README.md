@@ -1,6 +1,6 @@
 # Newsific
 
-Newsific is a News Reader app, created for learning purposes.
+Newsific is a very simple and easy to use News Reader app, created for learning purposes.
 
 ## Screenshots
 
