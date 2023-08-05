@@ -105,7 +105,7 @@ extension SeeAllController: UISearchBarDelegate {
         filteredNews = APIResponse(news: [News]())
         
         for item in news.news {
-            if item.title.contains(searchBar.text ?? "") {
+            if item.author.contains(searchBar.text ?? "") {
                 filteredNews.news.append(item)
             }
         }
